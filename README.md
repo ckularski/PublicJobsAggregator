@@ -15,9 +15,9 @@ Pug templates
 MySql
 
 ## Installation Requirements 
-Node.js
-Python
-bs4
-sqlalchemy
-requests
-pytz
+Node.js <br/>
+Python <br/>
+bs4 <br/>
+sqlalchemy <br/>
+requests <br/>
+pytz <br/>

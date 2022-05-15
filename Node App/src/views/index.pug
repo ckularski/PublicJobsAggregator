@@ -1,0 +1,86 @@
+extends layout
+block content
+    .container
+        h2 
+            a(href='/jobs') JobListings
+        .success
+        .error
+        -let count = total
+        -let recordsPerPage = pageSize
+        -let pageButtonCount = 10
+        -let base_url = "/jobs/" 
+        -let page = pageNumber
+        
+        -let lower_limit = (parseInt((page - 1)/pageButtonCount) * pageButtonCount) + 1
+        -let upper_limit = lower_limit + pageButtonCount;
+        -let paginationNo = lower_limit - 1
+
+        .form
+            form(id="search" action="/jobs" method="GET")
+                .formContent
+                    label(for="title") Filter by title
+                    input(type="text" id="title" name="title")
+                    label(for="department") Filter by department
+                    input(type="text" id="department" name="department")
+                    label(for="location") Filter by location
+                    input(type="text" id="location" name="location")
+                    label(for="sort") Sort by 
+                    input(type="text" id="sort" name="sort")
+                .formContent
+                    input(class="submitBtn" type="submit" value="Submit")
+
+        if count >= recordsPerPage
+            .pagination
+                ul
+                    -if (lower_limit > 1)
+                        li.page-item
+                            -let pageUrl =  base_url +  (lower_limit - pageButtonCount) + req;
+                            a.page-link(href=pageUrl, tabindex='-1') Previous
+                    -else
+                        li.page-item.disabled
+                            a.page-link(href='#', tabindex='-1') Previous
+                    -for (i = 1; i < pageButtonCount + 1; i++)
+
+                        -if (count > (recordsPerPage * paginationNo))
+                            -paginationNo = paginationNo + 1
+                            -let pageUrl =  base_url + paginationNo + req; 
+                                -if (page != paginationNo)
+                                    li.page-item
+                                        a.page-link(href=pageUrl) #{paginationNo}
+                                -else
+                                    li.page-item
+                                        a.page-link(href='#')
+                                            #{paginationNo}
+                                                
+                    - if (count > (recordsPerPage * upper_limit))
+                        -let pageUrl = base_url + (upper_limit + 1) + req;
+                        li.page-item
+                            a.page-link(href=pageUrl) Next
+                    -else
+                        li.page-item.disabled
+                            a.page-link(href='#', tabindex='-1') Next
+
+        table
+            tbody
+                tr
+                    th jobId
+                    th title 
+                    th department 
+                    th salaryRange 
+                    th location 
+                    th start date 
+                    th close date 
+                    th published date
+
+            each job in data
+                tr
+                    td #{job['jobid']}
+                    td 
+                        a(href=job['link'] rel="noopener noreferrer" target="_blank") #{job['title']}
+                    td #{job['department']}
+                    td #{job['salaryRange']}
+                    td #{job['location']}
+                    td #{job['startDate']?(new Date(job['startDate'])).toLocaleString():""}
+                    td #{job['closeDate']?(new Date(job['closeDate'])).toLocaleString():""}
+                    td #{job['pubDate']?(new Date(job['pubDate'])).toLocaleString():""}
+        

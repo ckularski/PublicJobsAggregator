@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require("cors");
 const path = require('path');
 const jobs = require('./src/routes/jobsRoutes');
-const sites = require('./src/routes/siteRoutes');
 
 // create express app
 const app = express();
